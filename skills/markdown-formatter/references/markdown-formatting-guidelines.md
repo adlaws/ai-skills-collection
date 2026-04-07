@@ -122,3 +122,52 @@ inline syntax such as $s = ut + \frac{1}{2}at^2$, or multiline syntax, such as:
 $$
 a = \max\left(\frac{F_{\mathrm{net}}}{m \cdot (1 + k_{\mathrm{rot}})}, 0\right)
 $$
+
+## Link Correctness
+
+All markdown links must be validated for correctness. This applies to both
+inline links (`[text](target)`) and reference-style links (`[text][ref]`).
+
+### Internal Links
+
+Internal links point to other files or headings within the repository.
+
+* **Relative file paths**: Every relative link target (e.g.,
+  `[foo](../bar/baz.md)`) must resolve to a file that actually exists on
+  disk when evaluated from the directory containing the source file. Use
+  tools such as `file_search` or `list_dir` to confirm the target exists
+  before accepting a link as valid.
+* **Anchor fragments**: If a link includes a fragment (e.g.,
+  `[section](./page.md#some-heading)`), verify that the target file
+  contains a heading whose auto-generated slug matches the fragment. Slug
+  rules: lowercase, spaces become hyphens, non-alphanumeric characters
+  (except hyphens) are removed.
+* **No dead links after refactoring**: When files are moved, renamed, or
+  deleted, search the entire `docs/` tree (and any other `.md` files in
+  the repo) for links that referenced the old path and update or remove
+  them.
+* **Case sensitivity**: Treat file paths as case-sensitive (Linux
+  filesystem). `Foo.md` and `foo.md` are different files.
+
+### External Links
+
+External links point to URLs outside the repository (HTTP/HTTPS).
+
+* **Well-formed URLs**: Every external link must be a syntactically valid
+  URL with an `http://` or `https://` scheme.
+* **No placeholder URLs**: Links must not contain placeholder or example
+  domains (e.g., `example.com`, `TODO`, `TBD`).
+* **Stable references preferred**: Prefer permalinks or versioned URLs
+  over links that are likely to rot (e.g., link to a tagged release
+  rather than `master`/`main` when referencing a specific code snapshot).
+
+### Validation Procedure
+
+When reviewing or editing markdown files, perform the following checks:
+
+1. Extract every link target from the file.
+2. For each internal link, confirm the target file exists and any anchor
+   fragment matches a heading in that file.
+3. For each external link, confirm the URL is well-formed and does not
+   use a placeholder domain.
+4. Report or fix any broken links before considering the file complete.
