@@ -1,12 +1,13 @@
-````skill
 ---
 name: ticket-maker
-description: 'Create Jira-style work tickets in markdown format. Use when asked to "create a ticket", "make a work ticket", "write a Jira ticket", "draft a story", "create a task", "write acceptance criteria", or when structuring work items with story, description, acceptance criteria, design, implementation notes, estimates, and release notes.'
+description: 'Create Jira-style work tickets in markdown format. Use when asked to "create a ticket", "make a work ticket", "write a Jira ticket", "draft a story", "create a task", "write acceptance criteria", or when structuring work items with story, description, acceptance criteria, design, implementation notes, estimates, and release notes. Generated tickets will be used by the ticket-planner and ticket-worker skills to plan and execute work.'
 ---
 
 # Work Ticket Maker
 
 A skill for creating structured Jira-style work tickets in markdown format. Produces a complete ticket document with all standard sections needed to plan, estimate, implement, verify, and document a unit of work.
+
+The created ticket can then be analyzed and filled out by the `ticket-planner` skill to determine design and effort, and ultimately executed by the `ticket-worker` skill.
 
 ## When to Use This Skill
 
@@ -21,6 +22,32 @@ A skill for creating structured Jira-style work tickets in markdown format. Prod
 - A clear understanding of the work to be done, or enough context for the agent to infer it
 - Knowledge of the target audience/user role (for the story statement)
 
+## Workflow
+1. Interpret the user’s request.
+   - If it’s ambiguous, assume they want a JIRA ticket.
+   - Never write or edit code under any circumstance.
+2. Extract key details:
+   - Persona
+   - Goal
+   - Benefit
+   - Any relevant technical elements
+3. Write each section using **only words necessary for clarity**.
+4. Ensure the output is executable by a developer with no further clarification needed.
+5. Output the formatted JIRA ticket once, without unnecessary commentary.
+
+## Style Rules
+- Be **factual, minimal, and explicit**.
+- Avoid intros, transitions, or commentary.
+- Use **direct, simple sentences**.
+- Never include implementation advice or sample code.
+- If uncertain, ask only what’s required to remove ambiguity before generating the ticket.
+
+## Behavior
+- Always produce one complete, formatted ticket per user request.
+- Never modify files, execute tools, or suggest code.
+- Never output scaffolding or placeholder templates.
+- Assume the goal is ticket generation unless explicitly told otherwise.
+
 ## Ticket Structure
 
 Generate a markdown document with the following sections, in order. Use the information provided by the user to fill in as many sections as possible. Sections that are typically filled in later by the developer should be left with a placeholder note.
@@ -32,11 +59,15 @@ Generate a markdown document with the following sections, in order. Use the info
 
 ## Story
 
-As a **[USER/ROLE]** I want **[FEATURE/CAPABILITY]** so that **[PURPOSE/REASON]**.
+As a [persona], I want [goal] so that [benefit].
 
 ## Description
 
-[Detailed description of the problem to be solved, relevant context, examples, expected workflows, edge cases, or background information that helps the developer understand the full scope of the work.]
+[2–3 brief sentences describing the problem, solution, and any essential context.]
+
+**Technical Context (if applicable)**
+
+- [File/service/component]
 
 ## Acceptance Criteria
 
@@ -96,12 +127,11 @@ _To be completed by the assigned developer for the reviewer._
 - Be specific and action-oriented (e.g., "Add CSV export to reports page" not "Reports improvement").
 
 ### Story
-- Always use the format: **As a [USER/ROLE] I want [FEATURE/CAPABILITY] so that [PURPOSE/REASON].**
-- The role should be a concrete user type (e.g., "project manager", "API consumer", "end user"), not generic.
+- Always use the format: **As a [persona], I want [goal] so that [benefit].**
+- The persona should be a concrete user type (e.g., "project manager", "API consumer", "end user"), not generic.
 
 ### Description
 - Provide enough context for a developer unfamiliar with the feature to understand the problem.
-- Include examples, edge cases, or workflow descriptions where helpful.
 - Reference related tickets or documentation if applicable.
 
 ### Acceptance Criteria
@@ -118,12 +148,13 @@ _To be completed by the assigned developer for the reviewer._
 - If the user provides design direction, include it.
 
 ### Estimate
+- Leave blank by default with placeholder text for the ticket-planner.
 - Use only the Fibonacci-like scale: **1, 2, 3, 5, 8, 10, or 20**.
 - If 20, recommend breaking the ticket into smaller tickets.
 - Leave blank by default for the developer to fill out.
 
 ### Verification Notes
-- Leave blank by default with placeholder text for the reviewer.
+- Leave blank by default with placeholder text for the ticket-worker.
 - If the user provides verification guidance, include it.
 
 ### Release Notes

@@ -1,7 +1,7 @@
 ````skill
 ---
 name: work-ticket-planner
-description: 'Analyze and plan work tickets created by ticket-maker. Use when asked to "plan a ticket", "estimate a ticket", "fill out the design", "analyze a work ticket", "plan implementation", or when a developer needs to understand approach and effort for a Jira-style markdown ticket. Reads the ticket Title, Story, Description, and Acceptance Criteria, examines the current codebase for context, then fills in the Estimate and Design sections.'
+description: 'Analyze and plan work tickets created by ticket-maker. Use when asked to "plan a ticket", "estimate a ticket", "fill out the design", "analyze a work ticket", "plan implementation", or when a developer needs to understand approach and effort for a Jira-style markdown ticket. Reads the ticket Title, Story, Description, and Acceptance Criteria, examines the current codebase for context, then fills in the Estimate and Design sections. The completed ticket will be used by the ticket-worker skill to execute the work.'
 ---
 
 # Work Ticket Planner
