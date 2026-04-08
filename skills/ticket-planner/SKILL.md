@@ -79,7 +79,7 @@ Fill in the **Design** section of the ticket with a clear, concise plan. The des
 4. **Behavioral changes** — How will the system behave differently after this work? Any new user-facing flows?
 5. **Edge cases & risks** — Are there known edge cases, backward-compatibility concerns, or risks to call out?
 6. **Testing strategy** — What kinds of tests are needed? (unit, integration, manual verification) Which existing test patterns to follow?
-7. **Documentation** — What documentation needs updating? (README, inline docs, config schema descriptions, etc.)
+7. **Documentation** — What documentation needs updating? (README, inline docs, config schema descriptions, user facing documentation, AI facing documentation, etc.)
 
 #### Design Writing Guidelines
 
