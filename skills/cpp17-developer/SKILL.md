@@ -1,3 +1,4 @@
+````skill
 ---
 name: cpp17-developer
 description: Use this skill when implementing or refactoring C++ application logic in this repository, especially for C++17 features, API design, and unit-test-backed changes in jerrycan/src and jerrycan/test.
