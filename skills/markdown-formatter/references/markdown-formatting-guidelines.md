@@ -68,16 +68,17 @@ Markdown must conform to the following `markdownlint` rule set:
 
 The JSON above is the source of truth. In practical terms, it means:
 
-* Use ATX headings (`#`, `##`, `###`) and keep heading levels ordered.
-* Keep one H1 per file.
-  must be unique regardless of nesting level.
+* Use ATX headings (`#`, `##`, `###`) and keep heading levels ordered (MD001, MD003).
+* Keep one H1 per file (MD025).
 * Do not use duplicate heading text within the same file (MD024). Every heading
-* Use `*` for unordered list items.
-* Use fenced code blocks with backticks and always include a language/info string.
-* Leave a single blank line where needed around lists, headings, and code fences.
-* Do not leave trailing spaces or multiple consecutive blank lines.
-* Avoid bare URLs; use proper markdown links.
-* Avoid raw HTML except `<br>`.
+  must be unique regardless of nesting level.
+* Do not end headings with punctuation such as `.`, `,`, `;`, `:`, `!`, or `?` (MD026).
+* Use `*` for unordered list items (MD004).
+* Use fenced code blocks with backticks and always include a language/info string (MD040, MD046, MD048).
+* Leave a single blank line where needed around lists, headings, and code fences (MD022, MD031, MD032).
+* Do not leave trailing spaces or multiple consecutive blank lines (MD009, MD012).
+* Avoid bare URLs; use proper markdown links (MD034).
+* Avoid raw HTML except `<br>` (MD033).
 * Avoid the use of the emdash `—` character; prefer usage of a `-`, comma, semicolon, or colon
   instead (as best fits the sentence flow and context).
 
