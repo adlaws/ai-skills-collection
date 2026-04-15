@@ -14,19 +14,19 @@ description: >
 
 ## When to Use
 
-- Reviewing pull requests or diffs that include `.js`, `.mjs`, or `.cjs` files.
-- Auditing an existing JavaScript codebase for defects, security gaps, or
+* Reviewing pull requests or diffs that include `.js`, `.mjs`, or `.cjs` files.
+* Auditing an existing JavaScript codebase for defects, security gaps, or
   maintainability issues.
-- Pre-merge quality gates where a structured checklist is needed.
-- Post-refactor validation to ensure no regressions were introduced.
+* Pre-merge quality gates where a structured checklist is needed.
+* Post-refactor validation to ensure no regressions were introduced.
 
 ## Prerequisites
 
-- Read and understand the project-specific coding guidelines in
+* Read and understand the project-specific coding guidelines in
   `.agents/skills/javascript-developer/references/javascript-development-guidelines.md`.
-- Read the testing guidelines in
+* Read the testing guidelines in
   `.agents/skills/javascript-developer/references/javascript-testing-guidelines..md`.
-- Ensure the application builds and serves correctly before starting the review.
+* Ensure the application builds and serves correctly before starting the review.
 
 ## Review Workflow
 
@@ -39,7 +39,7 @@ description: >
 
 ---
 
-## Part A — Language-Agnostic Review Checklist
+## Part A - Language-Agnostic Review Checklist
 
 These principles apply to any imperative/OOP language.
 
@@ -98,7 +98,7 @@ These principles apply to any imperative/OOP language.
 
 ---
 
-## Part B — JavaScript-Specific Review Checklist
+## Part B - JavaScript-Specific Review Checklist
 
 These checks layer on top of Part A for JavaScript code.
 
@@ -219,12 +219,12 @@ These checks layer on top of Part A for JavaScript code.
 
 ## References
 
-- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)
-- [OWASP DOM-Based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)
-- [MDN JavaScript Guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide)
-- [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html)
-- [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
-- [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
-- Project guidelines: `.agents/skills/javascript-developer/references/javascript-development-guidelines.md`
-- Project testing guidelines: `.agents/skills/javascript-developer/references/javascript-testing-guidelines..md`
+* [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)
+* [OWASP DOM-Based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)
+* [MDN JavaScript Guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide)
+* [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html)
+* [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
+* [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
+* Project guidelines: `.agents/skills/javascript-developer/references/javascript-development-guidelines.md`
+* Project testing guidelines: `.agents/skills/javascript-developer/references/javascript-testing-guidelines..md`
 ````
