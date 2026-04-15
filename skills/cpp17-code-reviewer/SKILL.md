@@ -1,3 +1,4 @@
+````skill
 ---
 name: cpp17-code-reviewer
 description: >
@@ -12,17 +13,17 @@ description: >
 
 ## When to Use
 
-- Reviewing pull requests or diffs.
-- Auditing an existing codebase for defects, security gaps, or maintainability
+* Reviewing pull requests or diffs.
+* Auditing an existing codebase for defects, security gaps, or maintainability
   issues.
-- Pre-merge quality gates where a structured checklist is needed.
-- Post-refactor validation to ensure no regressions were introduced.
+* Pre-merge quality gates where a structured checklist is needed.
+* Post-refactor validation to ensure no regressions were introduced.
 
 ## Prerequisites
 
-- Read and understand the project-specific coding guidelines in
+* Read and understand the project-specific coding guidelines in
   `.agents/skills/cpp17-developer/references/cpp17-guidelines.md`.
-- Ensure the code compiles and all tests pass **before** starting the review:
+* Ensure the code compiles and all tests pass **before** starting the review:
   ```bash
   cmake -S . -B build -DBUILD_TESTING=ON
   cmake --build build -j
@@ -40,7 +41,7 @@ description: >
 
 ---
 
-## Part A — Language-Agnostic Review Checklist
+## Part A - Language-Agnostic Review Checklist
 
 These principles apply to any imperative/OOP language.
 
@@ -98,7 +99,7 @@ These principles apply to any imperative/OOP language.
 
 ---
 
-## Part B — C++-Specific Review Checklist
+## Part B - C++-Specific Review Checklist
 
 These checks layer on top of Part A for C++ code.
 
@@ -209,9 +210,9 @@ These checks layer on top of Part A for C++ code.
 
 ## References
 
-- [ISO C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
+* [ISO C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
   (P, I, F, C, R, ES, Per, CP, E, Con, T, SF, SL sections)
-- [SEI CERT C++ Coding Standard](https://wiki.sei.cmu.edu/confluence/display/cplusplus)
+* [SEI CERT C++ Coding Standard](https://wiki.sei.cmu.edu/confluence/display/cplusplus)
   (DCL, EXP, INT, CTR, STR, MEM, FIO, ERR, OOP, CON, MSC rules)
-- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)
-- Project guidelines: `.agents/skills/cpp17-developer/references/cpp17-guidelines.md`
+* [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)
+* Project guidelines: `.agents/skills/cpp17-developer/references/cpp17-guidelines.md`
