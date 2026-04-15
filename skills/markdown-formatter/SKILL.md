@@ -1,3 +1,4 @@
+````skill
 ---
 name: markdown-formatter
 description: Use this skill when formatting or refactoring Markdown documentation in this repository, ensuring consistency, readability, and adherence to style guidelines.
