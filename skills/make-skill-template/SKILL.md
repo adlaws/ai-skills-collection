@@ -1,3 +1,4 @@
+````skill
 ---
 name: make-skill-template
 description: 'Create new Agent Skills for GitHub Copilot from prompts or by duplicating this template. Use when asked to "create a skill", "make a new skill", "scaffold a skill", or when building specialized AI capabilities with bundled resources. Generates SKILL.md files with proper frontmatter, directory structure, and optional scripts/references/assets folders.'
@@ -9,16 +10,16 @@ A meta-skill for creating new Agent Skills. Use this skill when you need to scaf
 
 ## When to Use This Skill
 
-- User asks to "create a skill", "make a new skill", or "scaffold a skill"
-- User wants to add a specialized capability to their GitHub Copilot setup
-- User needs help structuring a skill with bundled resources
-- User wants to duplicate this template as a starting point
+* User asks to "create a skill", "make a new skill", or "scaffold a skill"
+* User wants to add a specialized capability to their GitHub Copilot setup
+* User needs help structuring a skill with bundled resources
+* User wants to duplicate this template as a starting point
 
 ## Prerequisites
 
-- Understanding of what the skill should accomplish
-- A clear, keyword-rich description of capabilities and triggers
-- Knowledge of any bundled resources needed (scripts, references, assets, templates)
+* Understanding of what the skill should accomplish
+* A clear, keyword-rich description of capabilities and triggers
+* Knowledge of any bundled resources needed (scripts, references, assets, templates)
 
 ## Creating a New Skill
 
@@ -117,21 +118,21 @@ my-awesome-skill/
 1. Copy the `make-skill-template/` folder
 2. Rename to your skill name (lowercase, hyphens)
 3. Update `SKILL.md`:
-   - Change `name:` to match folder name
-   - Write a keyword-rich `description:`
-   - Replace body content with your instructions
+   * Change `name:` to match folder name
+   * Write a keyword-rich `description:`
+   * Replace body content with your instructions
 4. Add bundled resources as needed
 5. Validate with `npm run skill:validate`
 
 ## Validation Checklist
 
-- [ ] Folder name is lowercase with hyphens
-- [ ] `name` field matches folder name exactly
-- [ ] `description` is 10-1024 characters
-- [ ] `description` explains WHAT and WHEN
-- [ ] `description` is wrapped in single quotes
-- [ ] Body content is under 500 lines
-- [ ] Bundled assets are under 5MB each
+* [ ] Folder name is lowercase with hyphens
+* [ ] `name` field matches folder name exactly
+* [ ] `description` is 10-1024 characters
+* [ ] `description` explains WHAT and WHEN
+* [ ] `description` is wrapped in single quotes
+* [ ] Body content is under 500 lines
+* [ ] Bundled assets are under 5MB each
 
 ## Troubleshooting
 
@@ -144,4 +145,4 @@ my-awesome-skill/
 
 ## References
 
-- Agent Skills official spec: <https://agentskills.io/specification>
+* Agent Skills official spec: <https://agentskills.io/specification>
