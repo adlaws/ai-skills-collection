@@ -14,16 +14,16 @@ User description → ticket-maker → ticket-planner → ticket-reviewer → (ad
 
 ## When to Use This Skill
 
-- User provides a task description and wants the entire workflow handled
-- User asks to "do this end to end", "handle this A to Z", or "take this from idea to done"
-- User wants to skip manually invoking each ticket skill in sequence
-- User says "create a ticket and do the work" or "full ticket workflow"
+* User provides a task description and wants the entire workflow handled
+* User asks to "do this end to end", "handle this A to Z", or "take this from idea to done"
+* User wants to skip manually invoking each ticket skill in sequence
+* User says "create a ticket and do the work" or "full ticket workflow"
 
 ## Prerequisites
 
-- A clear description of the work to be done (can be as brief as a sentence)
-- Access to the relevant codebase
-- The project should be in a buildable/testable state
+* A clear description of the work to be done (can be as brief as a sentence)
+* Access to the relevant codebase
+* The project should be in a buildable/testable state
 
 ## Workflow
 
@@ -31,9 +31,9 @@ User description → ticket-maker → ticket-planner → ticket-reviewer → (ad
 
 Read the `ticket-maker` skill instructions and follow them to create a ticket from the user's description.
 
-- Extract the persona, goal, benefit, and technical context from the user's input
-- Produce a complete ticket markdown file with all standard sections
-- Save the ticket to the `.tickets/` directory using a descriptive kebab-case filename
+* Extract the persona, goal, benefit, and technical context from the user's input
+* Produce a complete ticket markdown file with all standard sections
+* Save the ticket to the `.tickets/` directory using a descriptive kebab-case filename
 
 At the end of this step, confirm the ticket location to the user and briefly summarise what was created.
 
@@ -41,9 +41,9 @@ At the end of this step, confirm the ticket location to the user and briefly sum
 
 Read the `ticket-planner` skill instructions and follow them to fill in the Design and Estimate sections of the ticket created in Step 1.
 
-- Examine the codebase to understand the affected areas
-- Write the Design section with approach, key changes, data/interfaces, edge cases, testing strategy, and documentation
-- Assign an Estimate using the standard scale
+* Examine the codebase to understand the affected areas
+* Write the Design section with approach, key changes, data/interfaces, edge cases, testing strategy, and documentation
+* Assign an Estimate using the standard scale
 
 At the end of this step, briefly summarise the planned approach and estimate.
 
@@ -51,8 +51,8 @@ At the end of this step, briefly summarise the planned approach and estimate.
 
 Read the `ticket-reviewer` skill instructions and follow them to review the planned ticket.
 
-- Assess the plan for logical completeness, test coverage, documentation gaps, resource/performance impacts, external API compatibility, and estimate reasonableness
-- Produce either a PASS or a list of constructive suggestions
+* Assess the plan for logical completeness, test coverage, documentation gaps, resource/performance impacts, external API compatibility, and estimate reasonableness
+* Produce either a PASS or a list of constructive suggestions
 
 At the end of this step, share the review outcome with the user.
 
@@ -73,11 +73,11 @@ If the review was a PASS, proceed directly to Step 5.
 
 Read the `ticket-worker` skill instructions and follow them to implement the changes described in the (now reviewed and updated) ticket.
 
-- Implement the changes following the Design section
-- Add or update tests as specified
-- Update documentation as needed
-- Build and run all tests to confirm everything passes
-- Fill in the post-implementation sections: Implementation Notes, Verification Notes, Technical Release Notes, and Customer Release Notes
+* Implement the changes following the Design section
+* Add or update tests as specified
+* Update documentation as needed
+* Build and run all tests to confirm everything passes
+* Fill in the post-implementation sections: Implementation Notes, Verification Notes, Technical Release Notes, and Customer Release Notes
 
 At the end of this step, confirm the implementation is complete with a summary of what was done and the test results.
 
@@ -85,11 +85,11 @@ At the end of this step, confirm the implementation is complete with a summary o
 
 At each stage transition, provide a brief status update to the user so they can follow the progress:
 
-- After Step 1: "Ticket created at `[path]`."
-- After Step 2: "Plan complete. Estimate: [N]. Approach: [one-sentence summary]."
-- After Step 3: "Review: [PASS / N suggestions]." and list any suggestions.
-- After Step 4: "Addressed [N] of [M] suggestions. [brief summary]." (only if suggestions existed)
-- After Step 5: "Implementation complete. [N] tests pass."
+* After Step 1: "Ticket created at `[path]`."
+* After Step 2: "Plan complete. Estimate: [N]. Approach: [one-sentence summary]."
+* After Step 3: "Review: [PASS / N suggestions]." and list any suggestions.
+* After Step 4: "Addressed [N] of [M] suggestions. [brief summary]." (only if suggestions existed)
+* After Step 5: "Implementation complete. [N] tests pass."
 
 ## Error Handling
 
@@ -103,10 +103,10 @@ At each stage transition, provide a brief status update to the user so they can 
 
 ## Principles
 
-- **Each step follows its own skill's rules.** This skill defines the orchestration order and transitions, not the internal behaviour of each step. Read and follow each skill's SKILL.md for the detailed workflow.
-- **Keep the user informed.** Brief status updates at each transition prevent the user from wondering what's happening.
-- **Don't over-iterate.** One review pass is enough. Address valid feedback and move on.
-- **Respect scope.** If the review reveals the ticket is fundamentally wrong or too large, stop and consult the user rather than silently expanding the scope.
+* **Each step follows its own skill's rules.** This skill defines the orchestration order and transitions, not the internal behaviour of each step. Read and follow each skill's SKILL.md for the detailed workflow.
+* **Keep the user informed.** Brief status updates at each transition prevent the user from wondering what's happening.
+* **Don't over-iterate.** One review pass is enough. Address valid feedback and move on.
+* **Respect scope.** If the review reveals the ticket is fundamentally wrong or too large, stop and consult the user rather than silently expanding the scope.
 
 ````
 
