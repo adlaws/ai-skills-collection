@@ -55,7 +55,7 @@ The Docker Bench simulates a T264 autonomous haul truck using six containers, ea
 | [docker_bench/dockerfile-platform-sim](docker_bench/dockerfile-platform-sim) | T264 Simulator Dockerfile |
 | [docker_bench/dockerfile-test-manager](docker_bench/dockerfile-test-manager) | Test manager Dockerfile |
 | [docker_bench/dockerfile-avi-radio](docker_bench/dockerfile-avi-radio) | NAT gateway Dockerfile |
-| [docs/docker_bench_usage.md](docs/docker_bench_usage.md) | User-facing documentation for Docker Bench |
+| [docs/docker_bench/index.md](docs/docker_bench/index.md) | User-facing documentation for Docker Bench |
 
 ## Network Architecture
 
@@ -124,6 +124,13 @@ Each container runs an `overwrite-ip-address-config.service` at boot that rewrit
 
 - The `.env` variable `T264_SIM_VERSION` forces a specific version (in DPKG format)
 - If unset, the version bundled with the base image is used
+
+### Docker Bench Compatibility Matrix
+
+- Use this matrix when selecting compatible combinations of Docker Bench component versions:
+   [Docker Bench Versions Compatibility Matrix](https://fmgl-autonomy.atlassian.net/wiki/spaces/AFSENG/pages/1226080308/Docker+Bench+Versions+Compatibility+Matrix)
+- Important ordering note: the newest compatible combinations are at the **bottom** of the table, not the top.
+- When scanning manually, verify this by checking that version numbers increase as you go down.
 
 ## Container Capabilities and Permissions
 
@@ -210,9 +217,10 @@ If the readiness check times out:
 ### Build Failures
 
 1. Check if base images exist: the Dockerfiles expect pre-built `rtk_os_docker_bench_*` images.
-2. Verify Netskope CA certificate is accessible (used for SSL in all containers).
-3. For test-manager: ensure `USER_GITHUB_PAT` is set and the GitHub token has `repo`, `read:org`, `read:user` permissions with SSO enabled.
-4. Check that overlay files referenced in `COPY` directives exist at the expected paths.
+2. Before changing `CONTAINER_VERSION`, check the [Docker Bench Versions Compatibility Matrix](https://fmgl-autonomy.atlassian.net/wiki/spaces/AFSENG/pages/1226080308/Docker+Bench+Versions+Compatibility+Matrix) and pick a known-compatible combination (newest compatible entries are at the bottom of the table).
+3. Verify Netskope CA certificate is accessible (used for SSL in all containers).
+4. For test-manager: ensure `USER_GITHUB_PAT` is set and the GitHub token has `repo`, `read:org`, `read:user` permissions with SSO enabled.
+5. Check that overlay files referenced in `COPY` directives exist at the expected paths.
 
 ## Useful Commands
 
@@ -244,7 +252,7 @@ Docker Bench can integrate with the Imperium local environment for end-to-end te
 
 ## References
 
-- [Docker Bench Usage Documentation](docs/docker_bench_usage.md)
+- [Docker Bench Documentation](docs/docker_bench/index.md)
 - [AMT T264 Docker Bench (Confluence)](https://fmgl-autonomy.atlassian.net/wiki/spaces/PROJ/pages/889520682/AMT+T264+Docker+Bench#START-HERE)
 - [Imperium Local Environment](https://github.com/fmgl-autonomy/imperium/tree/master/Tools/local-environment)
 - [Docker official documentation](https://docs.docker.com/)
