@@ -1,4 +1,4 @@
-````skill
+```skill
 ---
 name: project-planner
 description: 'Generate a detailed project plan from high-level requirements. Use when asked to "plan a project", "create a project plan", "write an architecture document", "design a system", "plan an application", "create a high-level design", or when the user provides feature requirements and wants a comprehensive implementation plan covering architecture, components, phasing, and build strategy. Produces a structured markdown document. May ask clarifying questions before generating.'
@@ -7,6 +7,11 @@ description: 'Generate a detailed project plan from high-level requirements. Use
 # Project Planner
 
 A skill for turning high-level requirements into a detailed, actionable project plan. The user provides a description of what they want to build — features, constraints, technology preferences — and this skill produces a comprehensive markdown document that a development team can use to implement the system.
+
+Plans created by this skill will be placed in a `.plans/` directory in the codebase, with a descriptive kebab-case filename, unless
+otherwise specified by the user. If the plan is part of a sequence of plans the filename will be automatically generated based on the
+title, and prefixed with a number denoting its position in the sequence - for example, `001-back-end-plan.md`,
+`002-user-interface-plan.md`, etc.
 
 ## When to Use This Skill
 
@@ -147,4 +152,4 @@ When the system has specific performance requirements or known scalability conce
 | Technology choice is unclear | Default to the most common/practical option in the domain; note it as a decision point in Open Questions |
 | User wants code, not a plan | This skill produces plans only; direct them to implementation skills or workflows |
 
-````
+```
