@@ -10,6 +10,11 @@ A skill for creating structured Jira-style work tickets in markdown format. Prod
 
 The created ticket can then be analyzed and filled out by the `ticket-planner` skill to determine design and effort, and ultimately executed by the `ticket-worker` skill.
 
+Tickets created by this skill will be placed in a `.tickets/` directory in the codebase, with a descriptive kebab-case filename, unless
+otherwise specified by the user. If the ticket is part of a sequence of steps (e.g., generated as part of the `ticket-a-z` workflow), the
+filename will be automatically generated based on the title, and prefixed with a number denoting its position in the sequence - for example,
+`001-do-thing.md`, `002-do-the-next-thing.md`, etc.
+
 ## When to Use This Skill
 
 * User asks to "create a ticket", "make a work ticket", or "draft a story"
