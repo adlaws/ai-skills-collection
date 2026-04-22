@@ -28,7 +28,7 @@ Markdown must conform to the following `markdownlint` rule set:
     "MD010": { "code_blocks": false },
     "MD011": true,
     "MD012": { "maximum": 1 },
-    "MD013": false,
+    "MD013": { "line_length": 120, "heading_line_length": 120, "code_block_line_length": 120, "code_blocks": false, "tables": false },
     "MD014": true,
     "MD018": true,
     "MD019": true,
@@ -81,6 +81,74 @@ The JSON above is the source of truth. In practical terms, it means:
 * Avoid raw HTML except `<br>` (MD033).
 * Avoid the use of the emdash `—` character; prefer usage of a `-`, comma, semicolon, or colon
   instead (as best fits the sentence flow and context).
+
+## Line Length
+
+Lines must not exceed 120 characters (MD013). This applies to all prose, headings,
+and inline code. Code blocks and tables are exempt.
+
+When wrapping is needed, maintain the formatting context of the current block:
+
+* **List items**: Indent continuation lines to align with the first word of the
+  list item text (i.e., 2 spaces for `*`, 3 for `1.`, 4 for sub-items, etc.).
+
+    ```markdown
+    * This is a long list item that needs to wrap to a second line
+      because it exceeds the 120-character limit.
+    ```
+
+* **Blockquote callouts**: Repeat the `>` prefix on each continuation line:
+
+    ```markdown
+    > ⚠️ This is a warning that is long enough to require wrapping
+    > across two lines in the source markdown.
+    ```
+
+* **Nested blockquotes in lists**: Combine the list indentation with `>`:
+
+    ```markdown
+    1. First step.
+
+        > ℹ️ Additional context for step 1 that wraps to a
+        > second line.
+
+    2. Second step.
+    ```
+
+* **Prose paragraphs**: Simply break at a natural word boundary before
+  column 120. No special prefix is needed.
+
+## Callout Blocks
+
+Use blockquote-style callouts for inline warnings, notes, and informational asides.
+Each callout is a single `>` blockquote whose first token is an emoji indicator:
+
+| Type | Icon | Usage |
+|------|------|-------|
+| Alert | 🟥 | Unignorable facts or instructions that MUST be obeyed that may result in catastrophic outcomes if ignored (loss of data, destruction of property, loss of life) |
+| Warning | ⚠️ | Gotchas, destructive actions, or performance/security caveats |
+| Note | 📓 | Conventions, reminders, or things the reader should keep in mind |
+| Info | ℹ️ | Background context, references to standards, or supplementary detail |
+
+### Examples
+
+```markdown
+> 🟥 Do NOT use this software to operate a nuclear reactor.
+
+> ⚠️ Specifying a high accuracy threshold may negatively impact performance
+
+> 📓 Australian English spelling is preferred.
+
+> ℹ️ This is based on ISO standard ABC-1234
+```
+
+### Rules
+
+* Place the emoji immediately after `>` followed by a single space, then the text.
+* Keep callouts to one or two sentences. For longer content, use a regular subsection instead.
+* Do not nest callouts inside other blockquotes or list items.
+* Do not use GitHub-flavoured `[!NOTE]` / `[!WARNING]` admonition syntax; the emoji
+  blockquote style is the standard for this repository.
 
 ## Diagrams
 
