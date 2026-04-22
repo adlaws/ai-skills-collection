@@ -135,7 +135,7 @@ For Docker Bench-specific troubleshooting, refer to the `docker-bench-expert` sk
 1. Docker version >= 27.0.3: `docker --version`
 2. Docker CAN plugin installed: `docker plugin ls`
 3. Base images available: `docker images | grep rtk_os_docker_bench`
-4. `.env` has valid `CONTAINER_VERSION`
+4. `.env` has valid `AMT_DOCKER_BENCH_VERSION`
 5. No port conflicts: `ss -tlnp | grep -E '8009|8123|2020|2021|2022'`
 
 ## Test Issues
