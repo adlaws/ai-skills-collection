@@ -79,22 +79,33 @@ The Docker Bench uses four networks to mirror the real truck's network topology:
 | rpk3 | `10.10.10.112` | `10.10.1.112` | — |
 | platform-sim | `10.10.10.55` | `10.10.1.55` | CAN network |
 | test-manager | `10.10.10.56` | `10.10.1.56` | local-fms-network |
-| avi-radio | — | `10.10.1.2` | `172.18.50.1` (FMS side) |
+| avi-radio | — | `10.10.1.2` | `172.18.50.1` (primary), plus dedicated IPs per container |
 
 ### NAT and Port Forwarding (avi-radio)
 
-The avi-radio container performs Network Address Translation so that external systems (like FMS) can reach the internal containers through a single external IP (`172.18.50.1`). Port forwarding rules:
+The avi-radio container performs Network Address Translation using per-container dedicated IPs on the local-fms-network. Each onboard container has its own external IP, so traffic is routed per-container rather than requiring port-specific forwarding:
+
+| Container | Offboard IP | Dedicated FMS IP |
+|-----------|-------------|------------------|
+| rpk1 | `10.10.1.110` | `172.18.50.110` |
+| rpk2 | `10.10.1.111` | `172.18.50.111` |
+| rpk3 | `10.10.1.112` | `172.18.50.112` |
+| motium | `10.10.1.115` | `172.18.50.115` |
+| platform-sim | `10.10.1.55` | `172.18.50.55` |
+| test-manager | `10.10.1.56` | `172.18.50.56` |
+
+For each container, SNAT rewrites the source address of outgoing traffic to its dedicated FMS IP, and DNAT rewrites the destination of incoming traffic to its offboard IP.
+
+Explicit port forwarding is additionally set up for web interfaces and SSH access (especially for Windows users who cannot directly access local-fms-network):
 
 | Port | Protocol | Destination | Service |
 |------|----------|-------------|---------|
-| 19910 | UDP | rpk1 | DDS unicast discovery (FMS Bridge) |
-| 19911 | UDP | rpk1 | DDS unicast data (FMS Bridge) |
 | 8009 | TCP | rpk2 | CIC web interface |
 | 8123 | TCP | platform-sim | T264 Sim web interface |
-| 22 | TCP | rpk1 | SSH |
-| 2020 | TCP | rpk1:22 | SSH (alternative port) |
+| 2020 | TCP | rpk1:22 | SSH |
 | 2021 | TCP | rpk2:22 | SSH |
 | 2022 | TCP | rpk3:22 | SSH |
+| 2025 | TCP | motium:22 | SSH |
 
 ## IP Address Remapping System
 
@@ -110,14 +121,14 @@ Each container runs an `overwrite-ip-address-config.service` at boot that rewrit
 ### CIC Version (rpk2)
 
 - CIC tarballs are stored in `docker_bench/overlay/rpk2/persistent/`
-- The `.env` variable `CIC_FIND_PATTERN` controls which version is installed (e.g. `cic*0.62*.tgz`)
+- The `.env` variable `CIC_FIND_PATTERN` controls which version is installed (e.g. `cic*0.65*.tgz`)
 - Set to `cic*.tgz` to always install the latest available version
 - The `upgradeCIC.sh` script in the overlay handles installation
 
 ### RPK Version (rpk3)
 
 - RPK tarballs are stored in `docker_bench/overlay/rpk3/persistent/`
-- The `.env` variable `RPK_FIND_PATTERN` controls which version is installed (e.g. `rpk*FS62*.tgz`)
+- The `.env` variable `RPK_FIND_PATTERN` controls which version is installed (e.g. `rpk*FS65*.tgz`)
 - Set to `rpk*.tgz` to always install the latest available version
 
 ### T264 Sim Version (platform-sim)
@@ -172,7 +183,7 @@ Located in `docker_bench/overlay/common/persistent/`, these scripts simulate dat
 1. Check Docker version: requires >= 27.0.3. Run `docker --version`.
 2. Verify the Docker CAN plugin is installed: `docker plugin ls`. The `run_tests.sh` script installs it automatically.
 3. Check that base images are available: `docker images | grep rtk_os_docker_bench`.
-4. Verify `.env` has valid `CONTAINER_VERSION` (e.g. `latest-master`).
+4. Verify `.env` has valid `AMT_DOCKER_BENCH_VERSION` (e.g. `latest-master`).
 5. Check for port conflicts on the host: `ss -tlnp | grep -E '8009|8123|2020|2021|2022'`.
 
 ### Container Crashes or Won't Stay Running
@@ -217,7 +228,7 @@ If the readiness check times out:
 ### Build Failures
 
 1. Check if base images exist: the Dockerfiles expect pre-built `rtk_os_docker_bench_*` images.
-2. Before changing `CONTAINER_VERSION`, check the [Docker Bench Versions Compatibility Matrix](https://fmgl-autonomy.atlassian.net/wiki/spaces/AFSENG/pages/1226080308/Docker+Bench+Versions+Compatibility+Matrix) and pick a known-compatible combination (newest compatible entries are at the bottom of the table).
+2. Before changing `AMT_DOCKER_BENCH_VERSION`, check the [Docker Bench Versions Compatibility Matrix](https://fmgl-autonomy.atlassian.net/wiki/spaces/AFSENG/pages/1226080308/Docker+Bench+Versions+Compatibility+Matrix) and pick a known-compatible combination (newest compatible entries are at the bottom of the table).
 3. Verify Netskope CA certificate is accessible (used for SSL in all containers).
 4. For test-manager: ensure `USER_GITHUB_PAT` is set and the GitHub token has `repo`, `read:org`, `read:user` permissions with SSO enabled.
 5. Check that overlay files referenced in `COPY` directives exist at the expected paths.
@@ -233,9 +244,10 @@ If the readiness check times out:
 | View all logs | `docker compose logs -f` |
 | View one service's logs | `docker compose logs -f rpk1` |
 | Run automated tests | `./run_tests.sh` |
-| SSH into rpk1 | `ssh -p 22 rtkuser@localhost` or `docker exec -it rpk1 bash` |
+| SSH into rpk1 | `ssh -p 2020 rtkuser@localhost` or `docker exec -it rpk1 bash` |
 | SSH into rpk2 | `ssh -p 2021 rtkuser@localhost` |
 | SSH into rpk3 | `ssh -p 2022 rtkuser@localhost` |
+| SSH into motium | `ssh -p 2025 rtkuser@localhost` |
 | CIC web UI | Open `http://localhost:8009` |
 | T264 Sim web UI | Open `http://localhost:8123` |
 | Run ARCU tests manually | `docker exec -itu rtkuser rpk1 /opt/amt/bin/arcu -d 20 -i /opt/amt/share/arcu/arcu_config.xml` |
