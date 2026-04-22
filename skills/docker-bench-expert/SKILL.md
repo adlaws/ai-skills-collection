@@ -41,6 +41,21 @@ The Docker Bench simulates a T264 autonomous haul truck using six containers, ea
 | **avi-radio** | NAT Gateway | Emulates the AVI radio that bridges the truck's internal network to the external FMS/OT network using iptables NAT rules |
 | **test-manager** | Test Automation (optional) | Runs ARCU automation tests; enabled via `--profile test-manager` |
 
+### Multi-Asset Support
+
+Docker Bench supports running multiple instances simultaneously, each representing a different truck. The `ASSET_ID` variable in `.env` (default: `AHT000`) controls:
+
+- **Compose project name**: `amt-docker-bench-${ASSET_ID_LOWER}` (e.g., `amt-docker-bench-aht000`)
+- **Container names**: `<service>-${ASSET_ID}` (e.g., `rpk1-AHT000`)
+- **Network names**: `<network>-${ASSET_ID}` (e.g., `onboard-AHT000`, `offboard-AHT000`)
+
+Two conventions exist for running commands inside containers:
+
+- **Primary**: `docker exec <service>-AHT000 <command>` (e.g., `docker exec rpk1-AHT000 bash`)
+- **Alternative**: `docker compose exec <service> <command>` (e.g., `docker compose exec rpk1 bash`)
+
+The primary convention uses the full container name (service + asset ID). The alternative uses Compose service names and is useful when you do not know or want to type the asset ID. Both are valid; the documentation uses the primary convention.
+
 ### Key Files
 
 | File | Purpose |
@@ -65,10 +80,10 @@ The Docker Bench uses four networks to mirror the real truck's network topology:
 
 | Network | Subnet | Purpose | Real-World Equivalent |
 |---------|--------|---------|----------------------|
-| **onboard** (local-ocs-network) | `10.10.10.0/24` | Internal communication between onboard computers | The truck's internal Ethernet connecting all RPKs |
-| **offboard** (amt-offboard) | `10.10.1.0/24` | Connects onboard computers to the AVI radio | The link from onboard computes to the external-facing radio |
+| **onboard** (`onboard-${ASSET_ID}`) | `10.10.10.0/24` | Internal communication between onboard computers | The truck's internal Ethernet connecting all RPKs |
+| **offboard** (`offboard-${ASSET_ID}`) | `10.10.1.0/24` | Connects onboard computers to the AVI radio | The link from onboard computes to the external-facing radio |
 | **local-fms-network** | `172.18.0.0/16` | External FMS/cloud connectivity | The OT (Operational Technology) mine network |
-| **can** | Docker CAN plugin | CAN bus between RPK2, RPK3, and platform-sim | Physical CAN bus on the truck |
+| **can** (`can-${ASSET_ID}`) | Docker CAN plugin | CAN bus between RPK2, RPK3, and platform-sim | Physical CAN bus on the truck |
 
 ### IP Address Assignments
 
@@ -149,11 +164,13 @@ The containers require elevated Linux capabilities to function:
 
 | Capability | Used By | Why |
 |------------|---------|-----|
-| `CAP_NET_ADMIN` | All RPKs, platform-sim | Network configuration, IP remapping, interface management |
-| `CAP_SYS_MODULE` | All RPKs, platform-sim | Kernel module loading (CAN drivers) |
+| `CAP_NET_ADMIN` | All RPKs, platform-sim, test-manager | Network configuration, IP remapping, interface management |
+| `CAP_SYS_MODULE` | All RPKs, platform-sim, test-manager | Kernel module loading (CAN drivers) |
 | `CAP_SYS_PTRACE` | rpk1 | Process tracing for diagnostics |
-| `CAP_IPC_LOCK` | rpk2, rpk3 | Lock memory for real-time performance |
-| `CAP_SYS_NICE` | rpk2, rpk3 | Set real-time scheduling priorities |
+| `CAP_IPC_LOCK` | rpk2, rpk3, platform-sim | Lock memory for real-time performance |
+| `CAP_SYS_NICE` | rpk2, rpk3, platform-sim | Set real-time scheduling priorities |
+| `NET_ADMIN` | avi-radio | NAT and iptables rules |
+| `NET_RAW` | avi-radio | Raw socket access for network translation |
 
 ## DDS Communication
 
@@ -203,7 +220,7 @@ The test script waits for these processes:
 **platform-sim**: `/usr/bin/t264_simulator`
 
 If the readiness check times out:
-1. Shell into the container: `docker exec -it rpk1 bash`.
+1. Shell into the container: `docker compose exec rpk1 bash`.
 2. Check `systemctl status amt.service` (rpk1) or the relevant service.
 3. Check `journalctl -u amt.service --no-pager -n 50` for errors.
 4. Verify DDS licence is present and valid (RTI Connext).
@@ -211,18 +228,18 @@ If the readiness check times out:
 ### Networking Issues Between Containers
 
 1. Verify containers are on the correct networks: `docker network inspect <network>`.
-2. Test connectivity: `docker exec rpk1 ping 10.10.10.111` (rpk2 onboard).
+2. Test connectivity: `docker compose exec rpk1 ping 10.10.10.111` (rpk2 onboard).
 3. Check that applications bind to `0.0.0.0`, not `127.0.0.1`.
 4. For DDS issues: verify QoS profiles match across containers and domain ID is consistent.
-5. For FMS connectivity: check avi-radio NAT rules with `docker exec avi-radio iptables -t nat -L -n`.
+5. For FMS connectivity: check avi-radio NAT rules with `docker compose exec avi-radio iptables -t nat -L -n`.
 
 ### CAN Bus Issues
 
 1. Verify the Docker CAN plugin is running: `docker plugin ls`.
-2. Check CAN interfaces inside containers: `docker exec rpk2 ip link show`.
+2. Check CAN interfaces inside containers: `docker compose exec rpk2 ip link show`.
 3. Decode CAN messages from platform-sim:
    ```bash
-   docker exec platform-sim bash -l -c "candump vcan10 | cantools decode --single-line /t264-sim/libraries/dbc/DBW_OAL.dbc"
+   docker compose exec platform-sim bash -l -c "candump vcan10 | cantools decode --single-line /t264-sim/libraries/dbc/DBW_OAL.dbc"
    ```
 
 ### Build Failures
@@ -244,22 +261,22 @@ If the readiness check times out:
 | View all logs | `docker compose logs -f` |
 | View one service's logs | `docker compose logs -f rpk1` |
 | Run automated tests | `./run_tests.sh` |
-| SSH into rpk1 | `ssh -p 2020 rtkuser@localhost` or `docker exec -it rpk1 bash` |
+| SSH into rpk1 | `ssh -p 2020 rtkuser@localhost` or `docker compose exec rpk1 bash` |
 | SSH into rpk2 | `ssh -p 2021 rtkuser@localhost` |
 | SSH into rpk3 | `ssh -p 2022 rtkuser@localhost` |
 | SSH into motium | `ssh -p 2025 rtkuser@localhost` |
 | CIC web UI | Open `http://localhost:8009` |
 | T264 Sim web UI | Open `http://localhost:8123` |
-| Run ARCU tests manually | `docker exec -itu rtkuser rpk1 /opt/amt/bin/arcu -d 20 -i /opt/amt/share/arcu/arcu_config.xml` |
+| Run ARCU tests manually | `docker exec -itu rtkuser rpk1-AHT000 /opt/amt/bin/arcu -d 20 -i /opt/amt/share/arcu/arcu_config.xml` |
 | Check container readiness | `docker ps --format 'table {{.Names}}\t{{.Status}}'` |
-| Inspect NAT rules | `docker exec avi-radio iptables -t nat -L -n` |
+| Inspect NAT rules | `docker exec avi-radio-AHT000 iptables -t nat -L -n` |
 
 ## Imperium Integration
 
 Docker Bench can integrate with the Imperium local environment for end-to-end testing:
 
 - Use `startAsset.ps1 -useDockerBench` to connect Imperium to the bench
-- The asset must be configured as AHT002 with `IsMannedAsset` set to `false`
+- The asset ID must be configured in `.env` to match the Imperium environment (e.g., `ASSET_ID=AHT002`) with `IsMannedAsset` set to `false`
 - Imperium modifies the FMS Bridge's `offboard_addresses_qos_profiles.xml` and `asset.xml` to match its own IPs and domain participant IDs
 
 ## References
