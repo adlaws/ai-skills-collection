@@ -22,6 +22,12 @@ editorial pass covering formatting, accuracy, consistency, and audience-appropri
   for all formatting checks.
 - Read every file in scope before proposing any changes. A full read is essential for
   assessing cross-file consistency.
+- Read the relevant codebase, configuration files, or other primary sources that the
+  documentation describes. Documentation must be verified against the actual
+  implementation, not just checked for internal consistency. For example, if docs
+  describe a Dockerfile's build steps, read the Dockerfile; if docs list environment
+  variables, check the `.env` file and compose file; if docs describe a service's
+  behaviour, check the source code.
 
 ## Edit Permission
 
