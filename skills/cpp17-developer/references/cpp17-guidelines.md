@@ -148,7 +148,7 @@ The `@file` documentation is *not* required, as the file name is self evident.
 
 ## Testing Expectations
 
-* Add or update tests in `jerrycan/test/` for each behavior change.
+* Add or update tests in the appropriate `test/` durectory/directories for each behavior change.
 * Cover normal flow and at least one failure/edge case.
 * Keep tests deterministic and independent from external systems.
 
